@@ -1,71 +1,44 @@
 # Cineon — API REST para un sistema de cine
 
-## Descripción
+## Descripción del proyecto
 
-Cineon es un proyecto académico desarrollado con Django y Django REST Framework. Su objetivo es proporcionar una API REST para administrar la información de un sistema de cine mediante endpoints que permiten consultar y registrar datos.
+Cineon es un proyecto académico desarrollado con Django y Django REST Framework para administrar la información de un sistema de cine. El proyecto incluye una API REST que permite consultar y registrar información mediante endpoints y solicitudes HTTP.
 
-El proyecto incluye ocho modelos principales: Usuario, Pelicula, Sala, Asiento, Funcion, Reserva, Pago y DetalleReserva.
+El sistema contempla la administración de usuarios, películas, salas, asientos, funciones, reservas, pagos y detalles de las reservas. También cuenta con una interfaz web desarrollada con HTML, CSS y JavaScript.
+
+## Objetivo
+
+Desarrollar una API REST que permita gestionar la información principal de un sistema de cine, utilizando modelos de Django, serializadores, vistas y rutas para organizar el acceso a los datos.
 
 ## Tecnologías utilizadas
 
-- Python
-- Django
-- Django REST Framework
-- PostgreSQL
-- HTML, CSS y JavaScript para la interfaz web del proyecto
+- **Python:** lenguaje de programación.
+- **Django:** framework para el desarrollo backend.
+- **Django REST Framework:** herramientas para crear la API REST.
+- **PostgreSQL:** sistema de gestión de bases de datos.
+- **HTML:** estructura de la interfaz web.
+- **CSS:** estilos visuales de la página.
+- **JavaScript:** funcionalidades de la interfaz.
+- **Git y GitHub:** control de versiones y alojamiento del código fuente.
 
-## Requisitos
+## Modelos del sistema
 
-- Python 3 instalado.
-- pip.
-- PostgreSQL instalado y en ejecución.
-- Git, para clonar y administrar el repositorio.
+El proyecto contiene ocho modelos principales:
 
-## Instalación
+| Modelo | Descripción |
+|---|---|
+| Usuario | Almacena la información de los usuarios del sistema. |
+| Pelicula | Contiene la información de las películas disponibles. |
+| Sala | Representa las salas de cine. |
+| Asiento | Registra los asientos pertenecientes a las salas. |
+| Funcion | Contiene información de las funciones, películas, horarios y salas. |
+| Reserva | Registra las reservas realizadas por los usuarios. |
+| Pago | Almacena información relacionada con los pagos de las reservas. |
+| DetalleReserva | Relaciona las reservas con los asientos correspondientes. |
 
-1. Clona el repositorio:
+## Endpoints de la API
 
-   ```bash
-   git clone URL_DE_TU_REPOSITORIO
-   cd NOMBRE_DE_LA_CARPETA
-   ```
-
-2. Crea y activa un entorno virtual:
-
-   En Windows:
-
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-
-3. Instala las dependencias:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-   Este comando requiere que el archivo `requirements.txt` esté incluido en el repositorio.
-
-4. Configura las variables de entorno o los datos de conexión de PostgreSQL según la configuración del proyecto. No publiques contraseñas reales ni otros secretos.
-
-5. Aplica las migraciones:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-6. Inicia el servidor de desarrollo:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-7. Abre en el navegador:
-
-   `http://127.0.0.1:8000/`
-
-## Endpoints disponibles
+La API utiliza las siguientes rutas para acceder a sus recursos:
 
 | Recurso | Endpoint |
 |---|---|
@@ -78,32 +51,153 @@ El proyecto incluye ocho modelos principales: Usuario, Pelicula, Sala, Asiento, 
 | Pagos | `/api/pagos/` |
 | Detalles de reserva | `/api/detalles-reserva/` |
 
-Los endpoints de colección permiten consultar registros con GET y crear registros con POST. Los endpoints individuales utilizan un identificador y permiten consultar, actualizar o eliminar un registro mediante los métodos HTTP que admite la configuración de la API.
+### Métodos HTTP
 
-## Ejemplos de uso
+- **GET:** consulta registros.
+- **POST:** registra nuevos datos.
+- **PUT:** actualiza un registro completo.
+- **PATCH:** actualiza parcialmente un registro.
+- **DELETE:** elimina un registro.
 
-Consultar las películas:
+Los endpoints individuales utilizan el identificador del registro. Por ejemplo:
 
-```http
-GET http://127.0.0.1:8000/api/peliculas/
+`/api/peliculas/1/`
+
+La disponibilidad de los métodos depende de la configuración de las vistas y las rutas de Django REST Framework.
+
+## Requisitos previos
+
+Para ejecutar el proyecto se necesita:
+
+- Python instalado.
+- pip.
+- PostgreSQL instalado y funcionando.
+- Git instalado.
+- Un editor de código, como Visual Studio Code.
+
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/bjarillo29/Cineon-API-Django.git
+cd Cineon-API-Django
 ```
 
-Consultar los usuarios:
+### 2. Crear un entorno virtual
 
-```http
-GET http://127.0.0.1:8000/api/usuarios/
+```bash
+python -m venv venv
 ```
 
-Registrar información: abre el endpoint correspondiente y utiliza el formulario POST de Django REST Framework, enviando los campos requeridos por el modelo.
+### 3. Activar el entorno virtual
 
-## Pruebas
+En Windows PowerShell:
 
-Se realizaron pruebas de solicitudes GET y POST para los ocho modelos utilizando la interfaz navegable de Django REST Framework.
+```powershell
+.\venv\Scripts\Activate.ps1
+```
 
-## Autor
+Si utilizas el símbolo del sistema de Windows (CMD):
 
-Proyecto académico Cineon.
+```bat
+venv\Scripts\activate.bat
+```
 
-## Nota
+### 4. Instalar las dependencias
 
-Este proyecto se desarrolló con fines educativos. Para utilizarlo en producción sería necesario reforzar aspectos como la autenticación, la autorización, la protección de datos y la configuración segura del servidor.
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Configurar la base de datos
+
+Crea una base de datos en PostgreSQL y configura la conexión en los ajustes del proyecto o mediante las variables de entorno utilizadas por la aplicación.
+
+No publiques contraseñas, claves ni otros datos privados en el repositorio.
+
+### 6. Aplicar las migraciones
+
+```bash
+python manage.py migrate
+```
+
+### 7. Iniciar el servidor
+
+```bash
+python manage.py runserver
+```
+
+Abre las siguientes direcciones en el navegador:
+
+- **Página principal:** http://127.0.0.1:8000/
+- **Administración de Django:** http://127.0.0.1:8000/admin/
+- **Raíz de la API:** http://127.0.0.1:8000/api/
+
+El servidor de desarrollo está destinado a pruebas locales.
+
+## Pruebas realizadas
+
+Se utilizaron las vistas navegables de Django REST Framework para probar los endpoints de los ocho modelos.
+
+Las pruebas incluyeron:
+
+- Consultas mediante GET.
+- Registro de datos mediante POST.
+- Verificación de las respuestas HTTP.
+- Comprobación de relaciones entre registros mediante sus identificadores.
+
+Las pruebas de GET y POST se realizaron para Usuarios, Películas, Salas, Asientos, Funciones, Reservas, Pagos y DetalleReserva.
+
+## Estructura del proyecto
+
+La estructura principal del proyecto es la siguiente:
+
+```text
+core_cine_bryan/
+├── cine/
+│   ├── migrations/
+│   ├── static/
+│   │   └── cine/
+│   │       ├── css/
+│   │       │   └── estilos.css
+│   │       └── js/
+│   │           └── script.js
+│   ├── Templates/
+│   │   └── Cine/
+│   │       ├── Inicio.html
+│   │       └── detalle_pelicula.html
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── core_cine_bryan/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+├── .gitignore
+├── docker-compose.yml
+├── manage.py
+├── readme.md
+└── requirements.txt
+```
+
+## Autor y repositorio
+
+**Proyecto:** Cineon — API REST para un sistema de cine.
+
+**Repositorio de GitHub:** [https://github.com/bjarillo29/Cineon-API-Django](https://github.com/bjarillo29/Cineon-API-Django)
+
+## Consideraciones de seguridad
+
+Este proyecto fue desarrollado con fines académicos. Antes de utilizarlo en un entorno de producción sería necesario revisar la autenticación, los permisos, la validación de los datos, el tratamiento seguro de contraseñas y la configuración del servidor.
+
+El archivo `.env` y cualquier archivo que contenga credenciales deben mantenerse fuera del repositorio público.
+
+## Conclusión
+
+El desarrollo de Cineon permitió practicar la creación de modelos, serializadores, vistas y rutas mediante Django REST Framework. También permitió comprobar la comunicación con la API a través de solicitudes HTTP y comprender cómo se relacionan los datos de un sistema de cine.
