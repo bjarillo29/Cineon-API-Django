@@ -1,0 +1,126 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cineon | Vive el cine</title>
+
+    <link rel="stylesheet" href="{% static 'cine/css/estilos.css' %}">
+    <script src="{% static 'cine/js/script.js' %}" defer></script>
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header>
+        <div class="logo">CINEON<span>.</span></div>
+
+        <nav>
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="#peliculas">Películas</a>
+        </nav>
+    </header>
+
+    <!-- PORTADA PRINCIPAL -->
+    <section class="hero">
+        <div class="hero-contenido">
+            <span class="etiqueta">TU CINE, TU EXPERIENCIA</span>
+
+            <h1>
+                La magia del cine<br>
+                comienza <span>aquí.</span>
+            </h1>
+
+            <p>
+                Descubre grandes historias, explora tus películas favoritas
+                y prepárate para vivir una experiencia inolvidable.
+            </p>
+
+            <a class="boton" href="#peliculas">
+                Explorar películas
+            </a>
+        </div>
+    </section>
+
+    <!-- CATÁLOGO DE PELÍCULAS -->
+    <main id="peliculas">
+
+        <div class="seccion-encabezado">
+            <div>
+                <h2>Películas disponibles</h2>
+                <p>Descubre lo que puedes ver en Cineon.</p>
+            </div>
+        </div>
+
+        <div class="peliculas">
+
+            {% for pelicula in peliculas %}
+
+                <article class="pelicula">
+
+                    <div class="pelicula-icono" aria-hidden="true">
+                        🎬
+                    </div>
+
+                    <p class="genero">
+                        {{ pelicula.genero }}
+                    </p>
+
+                    <h3>
+                        {{ pelicula.titulo }}
+                    </h3>
+
+                    <p class="sinopsis">
+                        {{ pelicula.sinopsis }}
+                    </p>
+
+                    <div class="datos">
+
+                        <p>
+                            <strong>Clasificación:</strong>
+                            {{ pelicula.clasificacion }}
+                        </p>
+
+                        <p>
+                            <strong>Duración:</strong>
+                            {{ pelicula.duracion }} minutos
+                        </p>
+
+                        <p>
+                            <strong>Estreno:</strong>
+                            {{ pelicula.fecha_estreno|date:"d/m/Y" }}
+                        </p>
+
+                    </div>
+
+                    <a
+                        class="boton"
+                        href="{% url 'detalle_pelicula' pelicula.id_peliculas %}"
+                    >
+                        Ver película
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <p class="vacio">
+                    Por el momento no hay películas disponibles.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        © 2026 Cineon · Tu próxima película te espera.
+    </footer>
+
+</body>
+</html>

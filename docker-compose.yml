@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:15-alpine #usamos una imagen ligera de postgresql 15
+    container_name: brayandb_fronted
+    restart: always
+    environment:
+      POSTGRES_USER: brayan
+      POSTGRES_PASSWORD: contrasena123
+      POSTGRES_DB: brayandb_core
+    ports:
+      - "5050:5432" #mapea el puerto del contenedor al de su maquina local
+    volumes:
+      - postgres_data32:/var/lib.postgresql/data #persistencia de datos
+
+  #definicion del volumen para que los datos no se pierdan al reiniciar
+volumes:
+  postgres_data32:  
