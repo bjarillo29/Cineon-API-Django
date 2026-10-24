@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva confirmada | Cineon</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            background: #101014;
+            color: #f5f5f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .contenedor {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 30px;
+            background: #1b1b23;
+            border: 1px solid #34343e;
+            border-radius: 10px;
+        }
+
+        .estado {
+            color: #54d99a;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #ff334b;
+            font-size: 28px;
+        }
+
+        h2 {
+            margin-top: 26px;
+        }
+
+        .detalle {
+            padding: 18px;
+            margin: 20px 0;
+            border: 1px solid #34343e;
+            border-radius: 8px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .total {
+            color: #ff5266;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 8px 8px 0 0;
+            border-radius: 6px;
+            background: #fa334b;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .secundario {
+            background: #34343e;
+        }
+
+        .nota {
+            color: #c4c4d0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+<main class="contenedor">
+    <p class="estado">✓ RESERVA REGISTRADA</p>
+
+    <h1>¡Tu función está lista!</h1>
+
+    <p>
+        Tu reserva se guardó correctamente en Cineon.
+        Esta confirmación corresponde a una demostración académica.
+    </p>
+
+    <section class="detalle">
+        <h2>Resumen de la reserva</h2>
+
+        <p>
+            <strong>Folio:</strong>
+            #{{ reserva.id_reserva }}
+        </p>
+
+        <p>
+            <strong>Usuario:</strong>
+            {{ reserva.usuario.nombre }} {{ reserva.usuario.apellido }}
+        </p>
+
+        <p>
+            <strong>Película:</strong>
+            {{ reserva.funcion.pelicula.titulo }}
+        </p>
+
+        <p>
+            <strong>Fecha:</strong>
+            {{ reserva.funcion.fecha|date:"d/m/Y" }}
+        </p>
+
+        <p>
+            <strong>Hora:</strong>
+            {{ reserva.funcion.hora|time:"H:i" }}
+        </p>
+
+        <p>
+            <strong>Sala:</strong>
+            {{ reserva.funcion.sala.nombre }}
+        </p>
+
+        <p>
+            <strong>Asientos:</strong>
+            {% for detalle in reserva.detalles.all %}
+                {{ detalle.asiento.fila }}{{ detalle.asiento.numero }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                No hay asientos registrados.
+            {% endfor %}
+        </p>
+
+        <p>
+            <strong>Cantidad de boletos:</strong>
+            {{ reserva.cantidad_boletos }}
+        </p>
+
+        <p>
+            <strong>Fecha de reserva:</strong>
+            {{ reserva.fecha_reserva|date:"d/m/Y H:i" }}
+        </p>
+
+        <p>
+            <strong>Pago:</strong>
+            {% for pago in reserva.pagos.all %}
+                {{ pago.estado }} — {{ pago.metodo_pago }}
+            {% empty %}
+                Sin registro de pago.
+            {% endfor %}
+        </p>
+
+        <p class="total">
+            Total: ${{ reserva.total|floatformat:2 }} MXN
+        </p>
+    </section>
+
+    <p class="nota">
+        El pago es simulado. No se ha realizado ningún cargo bancario
+        ni se procesó una transacción real.
+    </p>
+
+    <a class="boton" href="{% url 'inicio' %}">
+        Volver al catálogo
+    </a>
+
+    <a
+        class="boton secundario"
+        href="{% url 'detalle_pelicula' reserva.funcion.pelicula.id_peliculas %}">
+        Ver película
+    </a>
+</main>
+</body>
+</html>

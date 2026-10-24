@@ -24,6 +24,11 @@ class Pelicula(models.Model):
     clasificacion = models.CharField(max_length=20)
     duracion = models.PositiveIntegerField()
     fecha_estreno = models.DateField()
+    portada = models.ImageField(
+        upload_to="portadas/",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.titulo

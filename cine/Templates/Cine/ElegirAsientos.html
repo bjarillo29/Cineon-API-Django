@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegir asientos | Cineon</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            background: #101014;
+            color: #f5f5f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .contenedor {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 24px;
+            background: #1b1b23;
+            border: 1px solid #34343e;
+            border-radius: 10px;
+        }
+
+        a { color: #fff; }
+        .volver { font-size: 13px; }
+
+        h1 {
+            color: #ff334b;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #ff334b;
+            font-size: 21px;
+        }
+
+        .datos p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .pantalla {
+            max-width: 420px;
+            margin: 30px auto 24px;
+            padding: 10px;
+            border-radius: 50% 50% 10px 10px;
+            background: #dedee5;
+            color: #17171c;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .leyenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .cuadro {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        .verde { background: #26734d; }
+        .rojo { background: #fa334b; }
+        .gris { background: #565665; }
+
+        .rejilla {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .asiento {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 8px 4px;
+            border: 0;
+            border-radius: 6px;
+            background: #26734d;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .asiento:hover:not(:disabled) {
+            filter: brightness(1.2);
+        }
+
+        .asiento.seleccionado {
+            background: #fa334b;
+            outline: 2px solid white;
+        }
+
+        .asiento:disabled {
+            background: #565665;
+            color: #d1d1d8;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .resumen {
+            margin-top: 24px;
+            padding: 18px;
+            border: 1px solid #34343e;
+            border-radius: 8px;
+        }
+
+        .total {
+            color: #ff5266;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 6px;
+            background: #fa334b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .boton:disabled {
+            background: #565665;
+            cursor: not-allowed;
+        }
+
+        .error {
+            padding: 12px;
+            margin: 16px 0;
+            background: #49232b;
+            border: 1px solid #fa334b;
+            border-radius: 6px;
+        }
+
+        .nota {
+            color: #c4c4d0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 520px) {
+            .contenedor { padding: 18px; }
+            .rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+
+<body>
+<main class="contenedor">
+    <a class="volver"
+       href="{% url 'detalle_pelicula' funcion.pelicula.id_peliculas %}">
+        ← Volver a la película
+    </a>
+
+    <h1>Selecciona tus asientos</h1>
+
+    <div class="datos">
+        <h2>{{ funcion.pelicula.titulo }}</h2>
+
+        <p><strong>Fecha:</strong> {{ funcion.fecha|date:"d/m/Y" }}</p>
+        <p><strong>Hora:</strong> {{ funcion.hora|time:"H:i" }}</p>
+        <p><strong>Sala:</strong> {{ funcion.sala.nombre }}</p>
+        <p><strong>Precio por boleto:</strong>
+            ${{ funcion.precio|floatformat:2 }} MXN
+        </p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="pantalla">PANTALLA</div>
+
+    <div class="leyenda">
+        <span><span class="cuadro verde"></span>Disponible</span>
+        <span><span class="cuadro rojo"></span>Seleccionado</span>
+        <span><span class="cuadro gris"></span>Reservado</span>
+    </div>
+
+    <form method="post" id="form-reserva">
+        {% csrf_token %}
+
+        <div class="rejilla">
+            {% for asiento in asientos %}
+                {% if asiento.id_asiento in asientos_reservados %}
+                    <button class="asiento"
+                            type="button"
+                            disabled>
+                        {{ asiento.fila }}{{ asiento.numero }}
+                    </button>
+                {% else %}
+                    <button class="asiento"
+                            type="button"
+                            data-id="{{ asiento.id_asiento }}"
+                            data-nombre="{{ asiento.fila }}{{ asiento.numero }}"
+                            aria-pressed="false">
+                        {{ asiento.fila }}{{ asiento.numero }}
+                    </button>
+                {% endif %}
+            {% empty %}
+                <p>No hay asientos registrados para esta sala.</p>
+            {% endfor %}
+        </div>
+
+        <div id="campos-asientos"></div>
+
+        <section class="resumen">
+            <p><strong>Asientos seleccionados:</strong>
+                <span id="nombres-asientos">Ninguno</span>
+            </p>
+
+            <p><strong>Cantidad de boletos:</strong>
+                <span id="cantidad">0</span>
+            </p>
+
+            <p><strong>Total:</strong>
+                <span class="total" id="total">$0.00 MXN</span>
+            </p>
+
+            <button type="submit"
+                    class="boton"
+                    id="confirmar"
+                    disabled>
+                Confirmar reserva
+            </button>
+
+            <p class="nota">
+                Pago de demostración. No se realizará ningún cobro real.
+                La disponibilidad se verificará al confirmar.
+            </p>
+        </section>
+    </form>
+</main>
+
+<script>
+    // Django entrega el precio con dos decimales.
+    // El filtro floatformat no necesita un filtro adicional.
+    const precio = Number("{{ funcion.precio|floatformat:2 }}".replace(",", "."));
+
+    const botones = document.querySelectorAll(".asiento[data-id]");
+    const campos = document.getElementById("campos-asientos");
+    const nombres = document.getElementById("nombres-asientos");
+    const cantidad = document.getElementById("cantidad");
+    const total = document.getElementById("total");
+    const confirmar = document.getElementById("confirmar");
+    const formulario = document.getElementById("form-reserva");
+
+    const seleccionados = new Map();
+
+    function actualizarResumen() {
+        campos.innerHTML = "";
+
+        seleccionados.forEach((nombre, id) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "asientos";
+            input.value = id;
+            campos.appendChild(input);
+        });
+
+        const totalCalculado = seleccionados.size * precio;
+
+        nombres.textContent = seleccionados.size
+            ? Array.from(seleccionados.values()).join(", ")
+            : "Ninguno";
+
+        cantidad.textContent = seleccionados.size;
+
+        total.textContent = totalCalculado.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+
+        confirmar.disabled = seleccionados.size === 0;
+    }
+
+    botones.forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const id = boton.dataset.id;
+            const nombre = boton.dataset.nombre;
+
+            if (seleccionados.has(id)) {
+                seleccionados.delete(id);
+                boton.classList.remove("seleccionado");
+                boton.setAttribute("aria-pressed", "false");
+            } else {
+                seleccionados.set(id, nombre);
+                boton.classList.add("seleccionado");
+                boton.setAttribute("aria-pressed", "true");
+            }
+
+            actualizarResumen();
+        });
+    });
+
+    formulario.addEventListener("submit", (evento) => {
+        if (seleccionados.size === 0) {
+            evento.preventDefault();
+            alert("Selecciona al menos un asiento.");
+        } else {
+            confirmar.disabled = true;
+            confirmar.textContent = "Procesando reserva...";
+        }
+    });
+
+    actualizarResumen();
+</script>
+</body>
+</html>

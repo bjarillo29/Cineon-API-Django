@@ -10,6 +10,113 @@
 
     <link rel="stylesheet" href="{% static 'cine/css/estilos.css' %}">
     <script src="{% static 'cine/js/script.js' %}" defer></script>
+
+    <style>
+        /* Catálogo de películas */
+        .peliculas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            align-items: stretch;
+        }
+
+        /* Tarjetas */
+        .pelicula {
+            min-width: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .pelicula:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 28px rgba(255, 45, 65, 0.15);
+        }
+
+        /* Carteles verticales */
+        .pelicula-portada,
+        .pelicula-icono {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            height: auto;
+            max-height: 430px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            border-radius: 9px;
+            margin: 0 0 18px;
+            background: #171717;
+        }
+
+        .pelicula-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 65px;
+        }
+
+        /* Información de cada película */
+        .pelicula .genero {
+            margin-bottom: 8px;
+        }
+
+        .pelicula h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .pelicula .sinopsis {
+            line-height: 1.6;
+        }
+
+        .pelicula .datos {
+            margin-top: auto;
+            padding-top: 10px;
+        }
+
+        .pelicula .boton {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Ajustes para celulares */
+        @media (max-width: 600px) {
+            .peliculas {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .pelicula {
+                padding: 12px;
+            }
+
+            .pelicula-portada,
+            .pelicula-icono {
+                margin-bottom: 12px;
+            }
+
+            .pelicula-icono {
+                font-size: 42px;
+            }
+
+            .pelicula h3 {
+                font-size: 16px;
+            }
+
+            .pelicula .sinopsis {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .peliculas {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -61,9 +168,18 @@
 
                 <article class="pelicula">
 
-                    <div class="pelicula-icono" aria-hidden="true">
-                        🎬
-                    </div>
+                    {% if pelicula.portada %}
+                        <img
+                            class="pelicula-portada"
+                            src="{{ pelicula.portada.url }}"
+                            alt="Portada de {{ pelicula.titulo }}"
+                            loading="lazy"
+                        >
+                    {% else %}
+                        <div class="pelicula-icono" aria-hidden="true">
+                            🎬
+                        </div>
+                    {% endif %}
 
                     <p class="genero">
                         {{ pelicula.genero }}
@@ -78,7 +194,6 @@
                     </p>
 
                     <div class="datos">
-
                         <p>
                             <strong>Clasificación:</strong>
                             {{ pelicula.clasificacion }}
@@ -93,7 +208,6 @@
                             <strong>Estreno:</strong>
                             {{ pelicula.fecha_estreno|date:"d/m/Y" }}
                         </p>
-
                     </div>
 
                     <a

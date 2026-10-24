@@ -238,3 +238,79 @@
                 flex-direction: column;
             }
         }
+
+/* Ajustes responsivos para celulares */
+@media (max-width: 600px) {
+
+    header {
+        padding: 14px 18px;
+        gap: 12px;
+    }
+
+    .logo {
+        font-size: 1.35rem;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 0.85rem;
+    }
+
+    .hero {
+        padding: 42px 24px;
+    }
+
+    .hero-contenido {
+        max-width: 100%;
+    }
+
+    .hero h1 {
+        font-size: clamp(2rem, 8vw, 2.6rem);
+        line-height: 1.15;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    #peliculas {
+        padding: 32px 18px;
+    }
+
+    .seccion-encabezado h2 {
+        font-size: 1.5rem;
+    }
+
+    .peliculas {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .pelicula {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .pelicula h3,
+    .pelicula .sinopsis {
+        overflow-wrap: anywhere;
+    }
+
+    .pelicula .boton {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    footer {
+        padding: 18px;
+        text-align: center;
+        line-height: 1.6;
+    }
+}
